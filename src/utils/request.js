@@ -45,7 +45,7 @@ export default (url, method, submitDate) => {
   return request({
     url,
     method,
-    [method.toLowerCase() === 'get' ? 'parmas' : 'data']: submitDate
+    [method.toLowerCase() === 'get' ? 'params' : 'data']: submitDate
     // 因为传参是动态的，可能是get的使用parmas ？a=10&b=10，不是就用data 请求体传参。
     // [] 设置一个动态的key。里面可以写js表达式，js表达式的执行结果当作KEY
   })
