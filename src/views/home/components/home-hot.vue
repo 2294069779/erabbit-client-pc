@@ -1,30 +1,37 @@
 <template>
 <HomePanel title="人气推荐" sub-title="人气爆款 不容错过">
-     <ul ref="pannel" class="goods-list">
+  <div ref="target" style="position: relative;height: 406px;">
+    <Transition name="fade">
+     <ul v-if="goods.length" ref="pannel" class="goods-list">
       <li v-for="item in goods" :key="item.id">
         <RouterLink to="/">
-          <img :src="item.picture" alt="">
+          <img v-lazy="item.picture" alt="">
           <p class="name">{{item.title}}</p>
           <p class="desc">{{item.alt}}</p>
         </RouterLink>
       </li>
     </ul>
+     <HomeSkeleton bg="#f0f9f4" v-else />
+    </Transition>
+  </div>
+
 </HomePanel>
 </template>
 
 <script>
+import HomeSkeleton from './components-panel/home-skeleton.vue'
 import HomePanel from './components-panel/home-panel.vue'
+import { useLazyData } from '@/hooks'
 import { ref } from 'vue'
 import { findHot } from '@/api/home'
+
 export default {
   name: 'HomeNew',
-  components: { HomePanel },
+  components: { HomePanel, HomeSkeleton },
   setup () {
-    const goods = ref([])
-    findHot().then(data => {
-      goods.value = data.result
-    })
-    return { goods }
+    const target = ref(null) // 获取dom元素
+    const result = useLazyData(target, findHot)
+    return { goods: result, target }
   }
 }
 </script>
