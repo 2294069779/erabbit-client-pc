@@ -22,7 +22,11 @@ const routes = [
 // vue 3.0 createRouter({}) 创建路由实例
 const router = createRouter({
   history: createWebHashHistory(), // 使用hash 的路由模式
-  routes
+  routes,
+  // 当路由切换时触发，回到顶部
+  scrollBehavior () {
+    return { left: 0, top: 0 }
+  }
 })
 
 export default router

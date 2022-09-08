@@ -5,21 +5,28 @@
 // 在app上进行扩展,app提供 component directive 函数
 // 如果要挂载原型 app.config.globalProperties 方式
 
-import XtxSkeleton from './xtx-skeleton.vue'
-import XtxCarousel from './xtx-carousel.vue'
-import XtxMore from './xtx-more.vue'
+// import XtxSkeleton from './xtx-skeleton.vue'
+// import XtxCarousel from './xtx-carousel.vue'
+// import XtxMore from './xtx-more.vue'
 import defaultImg from '@/assets/images/200.png'
-import XtxBread from './xtx-bread.vue'
-import XtxBreadItem from './xtx-bread-item.vue'
+// import XtxBread from './xtx-bread.vue'
+// import XtxBreadItem from './xtx-bread-item.vue'
+// 导入library文件夹下的所有组件
+// 批量导入需要使用一个函数 require.context(dir,deep,matching)
+// 参数：1. 目录  2. 是否加载子目录  3. 加载的正则匹配
+const importFn = require.context('./', false, /\.vue$/) // 返回一个函数，里面包含文件
+// console.log(importFn()) // 文件名称数组
 
 export default {
   install (app) {
-    app.component(XtxSkeleton.name, XtxSkeleton)
-    app.component(XtxCarousel.name, XtxCarousel)
-    app.component(XtxMore.name, XtxMore)
-    app.component(XtxBread.name, XtxBread)
-    app.component(XtxBreadItem.name, XtxBreadItem)
     defineDirective(app)
+    // 批量注册全局组件
+    importFn.keys().forEach(key => { // key()可以得到路径
+      // 导入组件
+      const component = importFn(key).default // 得到文件中的默认导出
+      // 注册组件
+      app.component(component.name, component)
+    })
   }
 }
 // 设置图片懒加载
